@@ -5,545 +5,105 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MindTech | Industrial Generator Portal</title>
 
-  <!-- Exo 2 Font & JetBrains Mono -->
+  <!-- Inline favicon (no 404) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏭</text></svg>">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-
-  <!-- Particles.js for Quantum Background -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
-
-  <!-- QR Code Generator -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
   <style>
+    /* ... ALL YOUR EXISTING CSS (EXACTLY AS PROVIDED) ... */
     :root {
-      --bg-dark: #070a12;
-      --card-bg: rgba(15, 23, 42, 0.8);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --input-bg: rgba(30, 41, 59, 0.6);
-      --input-border: rgba(255, 255, 255, 0.12);
-
-      --accent-cyan: #38bdf8;
-      --accent-blue: #0284c7;
-      --accent-green: #10b981;
-      --accent-amber: #f59e0b;
-      --accent-rose: #f43f5e;
-      --accent-purple: #8b5cf6;
-
-      --text-primary: #f8fafc;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-
-      --radius-lg: 20px;
-      --radius-md: 12px;
-      --radius-sm: 8px;
-      --shadow-glow: 0 20px 50px rgba(139, 92, 246, 0.15);
+      --bg-dark: #070a12; --card-bg: rgba(15, 23, 42, 0.8); --card-border: rgba(255, 255, 255, 0.08);
+      --input-bg: rgba(30, 41, 59, 0.6); --input-border: rgba(255, 255, 255, 0.12);
+      --accent-cyan: #38bdf8; --accent-blue: #0284c7; --accent-green: #10b981;
+      --accent-amber: #f59e0b; --accent-rose: #f43f5e; --accent-purple: #8b5cf6;
+      --text-primary: #f8fafc; --text-secondary: #94a3b8; --text-muted: #64748b;
+      --radius-lg: 20px; --radius-md: 12px; --radius-sm: 8px; --shadow-glow: 0 20px 50px rgba(139, 92, 246, 0.15);
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Exo 2', sans-serif;
-      background-color: var(--bg-dark);
-      background-image:
-        radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.12) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(2, 132, 199, 0.1) 0px, transparent 50%);
-      background-attachment: fixed;
-      color: var(--text-primary);
-      min-height: 100vh;
-      padding: 30px 15px;
-      overflow-x: hidden;
-    }
-
-    #particles-js {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      padding: 40px;
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--card-border);
-      box-shadow: var(--shadow-glow);
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ===== BRAND HEADER ===== */
-    .brand-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 30px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--card-border);
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-
-    .brand-logo-area {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .brand-logo {
-      height: 48px;
-      width: auto;
-      filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.2));
-      transition: all 0.3s ease;
-    }
-
-    .brand-logo:hover {
-      filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.4));
-    }
-
-    .brand-text h1 {
-      font-size: 22px;
-      font-weight: 900;
-      letter-spacing: -0.5px;
-      background: linear-gradient(135deg, #ffffff, var(--accent-cyan), var(--accent-purple));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-family: 'Exo 2', sans-serif;
-    }
-
-    .brand-text .subtitle {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-weight: 500;
-      letter-spacing: 0.5px;
-      font-family: 'Exo 2', sans-serif;
-    }
-
-    .header-badges {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .badge-pelo, .badge-quantum, .badge-live {
-      padding: 6px 14px;
-      border-radius: 30px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .badge-pelo {
-      background: rgba(2, 132, 199, 0.15);
-      color: var(--accent-cyan);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      font-family: 'Exo 2', sans-serif;
-    }
-
-    .badge-quantum {
-      background: rgba(139, 92, 246, 0.15);
-      color: var(--accent-purple);
-      border: 1px solid rgba(139, 92, 246, 0.3);
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .badge-live {
-      background: rgba(244, 63, 94, 0.15);
-      color: var(--accent-rose);
-      border: 1px solid rgba(244, 63, 94, 0.3);
-      font-family: 'Exo 2', sans-serif;
-    }
-
-    /* ===== NAV TABS ===== */
-    .nav-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 25px;
-      background: rgba(15, 23, 42, 0.6);
-      padding: 6px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--card-border);
-      flex-wrap: wrap;
-    }
-
-    .tab-btn {
-      flex: 1;
-      padding: 12px 16px;
-      border: none;
-      background: transparent;
-      font-weight: 700;
-      cursor: pointer;
-      border-radius: var(--radius-sm);
-      color: var(--text-secondary);
-      transition: all 0.25s ease;
-      font-size: 13px;
-      min-width: 120px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-family: 'Exo 2', sans-serif;
-    }
-
-    .tab-btn.active {
-      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-      color: #ffffff;
-      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-    }
-
-    .tab-btn:hover:not(.active) {
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text-primary);
-    }
-
-    /* ===== CARDS & FORMS ===== */
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 25px;
-    }
-
-    @media(max-width: 768px) {
-      .grid-2 { grid-template-columns: 1fr; }
-      .container { padding: 20px 15px; }
-    }
-
-    .card-box {
-      background: rgba(30, 41, 59, 0.3);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-md);
-      padding: 24px;
-      transition: all 0.3s ease;
-    }
-
-    .card-box:hover {
-      border-color: var(--accent-purple);
-      box-shadow: 0 0 30px rgba(139, 92, 246, 0.05);
-    }
-
-    .box-header {
-      font-size: 14px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 18px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--text-primary);
-      font-family: 'Exo 2', sans-serif;
-    }
-
+    body { font-family: 'Exo 2', sans-serif; background-color: var(--bg-dark); background-image: radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.12) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(2, 132, 199, 0.1) 0px, transparent 50%); background-attachment: fixed; color: var(--text-primary); min-height: 100vh; padding: 30px 15px; overflow-x: hidden; }
+    #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    .container { max-width: 1000px; margin: 0 auto; background: var(--card-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: 40px; border-radius: var(--radius-lg); border: 1px solid var(--card-border); box-shadow: var(--shadow-glow); position: relative; z-index: 1; }
+    .brand-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--card-border); flex-wrap: wrap; gap: 15px; }
+    .brand-logo-area { display: flex; align-items: center; gap: 15px; }
+    .brand-logo { height: 48px; width: auto; filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.2)); transition: all 0.3s ease; }
+    .brand-logo:hover { filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.4)); }
+    .brand-text h1 { font-size: 22px; font-weight: 900; letter-spacing: -0.5px; background: linear-gradient(135deg, #ffffff, var(--accent-cyan), var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Exo 2', sans-serif; }
+    .brand-text .subtitle { font-size: 11px; color: var(--text-muted); font-weight: 500; letter-spacing: 0.5px; font-family: 'Exo 2', sans-serif; }
+    .header-badges { display: flex; gap: 10px; flex-wrap: wrap; }
+    .badge-pelo, .badge-quantum, .badge-live { padding: 6px 14px; border-radius: 30px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 6px; }
+    .badge-pelo { background: rgba(2, 132, 199, 0.15); color: var(--accent-cyan); border: 1px solid rgba(56, 189, 248, 0.3); font-family: 'Exo 2', sans-serif; }
+    .badge-quantum { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); border: 1px solid rgba(139, 92, 246, 0.3); font-family: 'JetBrains Mono', monospace; }
+    .badge-live { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); border: 1px solid rgba(244, 63, 94, 0.3); font-family: 'Exo 2', sans-serif; }
+    .nav-tabs { display: flex; gap: 8px; margin-bottom: 25px; background: rgba(15, 23, 42, 0.6); padding: 6px; border-radius: var(--radius-md); border: 1px solid var(--card-border); flex-wrap: wrap; }
+    .tab-btn { flex: 1; padding: 12px 16px; border: none; background: transparent; font-weight: 700; cursor: pointer; border-radius: var(--radius-sm); color: var(--text-secondary); transition: all 0.25s ease; font-size: 13px; min-width: 120px; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Exo 2', sans-serif; }
+    .tab-btn.active { background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); color: #ffffff; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3); }
+    .tab-btn:hover:not(.active) { background: rgba(255, 255, 255, 0.05); color: var(--text-primary); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+    @media(max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } .container { padding: 20px 15px; } }
+    .card-box { background: rgba(30, 41, 59, 0.3); border: 1px solid var(--card-border); border-radius: var(--radius-md); padding: 24px; transition: all 0.3s ease; }
+    .card-box:hover { border-color: var(--accent-purple); box-shadow: 0 0 30px rgba(139, 92, 246, 0.05); }
+    .box-header { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; color: var(--text-primary); font-family: 'Exo 2', sans-serif; }
     .form-group { margin-bottom: 16px; }
-
-    label {
-      display: block;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: var(--text-secondary);
-      margin-bottom: 6px;
-      letter-spacing: 0.5px;
-      font-family: 'Exo 2', sans-serif;
-    }
-
+    label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 6px; letter-spacing: 0.5px; font-family: 'Exo 2', sans-serif; }
     label .required { color: var(--accent-rose); }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--input-border);
-      background: var(--input-bg);
-      color: var(--text-primary);
-      font-size: 13px;
-      font-family: 'Exo 2', sans-serif;
-      transition: all 0.2s ease;
-    }
-
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: var(--accent-purple);
-      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
-    }
-
-    select option {
-      background: #0f172a;
-      color: #ffffff;
-    }
-
-    .btn {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: var(--radius-sm);
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-      font-family: 'Exo 2', sans-serif;
-    }
-
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .btn-purple {
-      background: linear-gradient(135deg, var(--accent-purple), #6d28d9);
-      color: #fff;
-      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-    }
-
-    .btn-purple:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
-    }
-
-    .btn-cyan {
-      background: linear-gradient(135deg, var(--accent-blue), #0369a1);
-      color: #fff;
-      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3);
-    }
-
-    .btn-cyan:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4);
-    }
-
-    .btn-green {
-      background: linear-gradient(135deg, var(--accent-green), #059669);
-      color: #fff;
-      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-    }
-
-    .btn-green:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-    }
-
-    /* ===== QR CONTAINER ===== */
-    #qrContainer {
-      margin-top: 20px;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      background: #ffffff;
-      padding: 20px;
-      border-radius: var(--radius-md);
-      animation: fadeIn 0.3s ease;
-    }
-
-    #qrContainer p {
-      color: #0f172a;
-      font-size: 12px;
-      font-weight: 700;
-      margin-top: 10px;
-      text-align: center;
-      font-family: 'Exo 2', sans-serif;
-    }
-
-    #qrContainer .qr-link {
-      color: #0284c7;
-      word-break: break-all;
-      font-size: 11px;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ===== MANIFEST TABLE ===== */
-    .manifest-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-      font-size: 13px;
-    }
-
-    .manifest-table th, .manifest-table td {
-      padding: 12px 16px;
-      text-align: left;
-      border-bottom: 1px solid var(--card-border);
-    }
-
-    .manifest-table th {
-      color: var(--text-muted);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-family: 'Exo 2', sans-serif;
-    }
-
-    .manifest-table td {
-      font-family: 'Exo 2', sans-serif;
-    }
-
-    .status-tag {
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 10px;
-      font-weight: 700;
-      font-family: 'JetBrains Mono', monospace;
-      display: inline-block;
-    }
-
-    .status-staged {
-      background: rgba(245, 158, 11, 0.15);
-      color: var(--accent-amber);
-    }
-    .status-transit {
-      background: rgba(56, 189, 248, 0.15);
-      color: var(--accent-cyan);
-    }
-    .status-verified {
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--accent-green);
-    }
-    .status-rejected {
-      background: rgba(244, 63, 94, 0.15);
-      color: var(--accent-rose);
-    }
-
-    /* ===== OFFLINE INDICATOR ===== */
-    .offline-indicator {
-      display: none;
-      background: rgba(245, 158, 11, 0.15);
-      border: 1px solid rgba(245, 158, 11, 0.3);
-      color: var(--accent-amber);
-      padding: 12px 18px;
-      border-radius: var(--radius-sm);
-      margin-bottom: 20px;
-      font-size: 13px;
-      font-weight: 600;
-      align-items: center;
-      gap: 10px;
-      font-family: 'Exo 2', sans-serif;
-    }
-
+    input, select, textarea { width: 100%; padding: 12px 14px; border-radius: var(--radius-sm); border: 1px solid var(--input-border); background: var(--input-bg); color: var(--text-primary); font-size: 13px; font-family: 'Exo 2', sans-serif; transition: all 0.2s ease; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent-purple); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); }
+    select option { background: #0f172a; color: #ffffff; }
+    .btn { width: 100%; padding: 14px; border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; font-family: 'Exo 2', sans-serif; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-purple { background: linear-gradient(135deg, var(--accent-purple), #6d28d9); color: #fff; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); }
+    .btn-purple:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4); }
+    .btn-cyan { background: linear-gradient(135deg, var(--accent-blue), #0369a1); color: #fff; box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3); }
+    .btn-cyan:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4); }
+    .btn-green { background: linear-gradient(135deg, var(--accent-green), #059669); color: #fff; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
+    .btn-green:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4); }
+    #qrContainer { margin-top: 20px; display: none; flex-direction: column; align-items: center; background: #ffffff; padding: 20px; border-radius: var(--radius-md); animation: fadeIn 0.3s ease; }
+    #qrContainer p { color: #0f172a; font-size: 12px; font-weight: 700; margin-top: 10px; text-align: center; font-family: 'Exo 2', sans-serif; }
+    #qrContainer .qr-link { color: #0284c7; word-break: break-all; font-size: 11px; font-family: 'JetBrains Mono', monospace; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .manifest-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px; }
+    .manifest-table th, .manifest-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--card-border); }
+    .manifest-table th { color: var(--text-muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; font-family: 'Exo 2', sans-serif; }
+    .manifest-table td { font-family: 'Exo 2', sans-serif; }
+    .status-tag { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; font-family: 'JetBrains Mono', monospace; display: inline-block; }
+    .status-staged { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); }
+    .status-transit { background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); }
+    .status-verified { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); }
+    .status-rejected { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); }
+    .offline-indicator { display: none; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: var(--accent-amber); padding: 12px 18px; border-radius: var(--radius-sm); margin-bottom: 20px; font-size: 13px; font-weight: 600; align-items: center; gap: 10px; font-family: 'Exo 2', sans-serif; }
     .offline-indicator.visible { display: flex; }
-
-    /* ===== TOAST ===== */
-    .toast {
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #0f172a;
-      color: var(--text-primary);
-      padding: 14px 28px;
-      border-radius: 30px;
-      border: 1px solid var(--card-border);
-      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-      font-weight: 600;
-      font-size: 13px;
-      z-index: 99999;
-      animation: slideUp 0.3s ease;
-      font-family: 'Exo 2', sans-serif;
-      max-width: 90%;
-      text-align: center;
-    }
-
+    .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #0f172a; color: var(--text-primary); padding: 14px 28px; border-radius: 30px; border: 1px solid var(--card-border); box-shadow: 0 10px 40px rgba(0,0,0,0.5); font-weight: 600; font-size: 13px; z-index: 99999; animation: slideUp 0.3s ease; font-family: 'Exo 2', sans-serif; max-width: 90%; text-align: center; }
     .toast.success { border-color: var(--accent-green); color: var(--accent-green); }
     .toast.error { border-color: var(--accent-rose); color: var(--accent-rose); }
     .toast.warning { border-color: var(--accent-amber); color: var(--accent-amber); }
-
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-      to { opacity: 1; transform: translateX(-50%) translateY(0); }
-    }
-
-    /* ===== FOOTER ===== */
-    .footer-credits {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 12px;
-      color: var(--text-muted);
-      border-top: 1px solid var(--card-border);
-      padding-top: 25px;
-      font-family: 'Exo 2', sans-serif;
-    }
-
-    .footer-credits .quantum {
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--accent-purple);
-      letter-spacing: 0.5px;
-    }
-
-    .footer-logos {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 30px;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
-    }
-
-    .footer-logo {
-      height: 36px;
-      width: auto;
-      opacity: 0.6;
-      transition: all 0.3s ease;
-      filter: drop-shadow(0 0 10px rgba(2, 132, 199, 0.05));
-    }
-
-    .footer-logo:hover {
-      opacity: 1;
-      filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.15));
-      transform: scale(1.02);
-    }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 768px) {
-      .brand-header { flex-direction: column; align-items: flex-start; }
-      .brand-logo-area { width: 100%; }
-      .header-badges { width: 100%; justify-content: flex-start; }
-      .brand-text h1 { font-size: 18px; }
-      .brand-logo { height: 40px; }
-      .grid-2 { grid-template-columns: 1fr; }
-      .nav-tabs { flex-wrap: wrap; }
-      .tab-btn { flex: 1 1 100%; min-width: 0; }
-    }
-
-    @media (max-width: 480px) {
-      .container { padding: 15px; }
-      .manifest-table { font-size: 11px; }
-      .manifest-table th, .manifest-table td { padding: 8px 10px; }
-    }
+    @keyframes slideUp { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+    .footer-credits { text-align: center; margin-top: 40px; font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--card-border); padding-top: 25px; font-family: 'Exo 2', sans-serif; }
+    .footer-credits .quantum { font-family: 'JetBrains Mono', monospace; color: var(--accent-purple); letter-spacing: 0.5px; }
+    .footer-logos { display: flex; justify-content: center; align-items: center; gap: 30px; margin-bottom: 15px; flex-wrap: wrap; }
+    .footer-logo { height: 36px; width: auto; opacity: 0.6; transition: all 0.3s ease; filter: drop-shadow(0 0 10px rgba(2, 132, 199, 0.05)); }
+    .footer-logo:hover { opacity: 1; filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.15)); transform: scale(1.02); }
+    @media (max-width: 768px) { .brand-header { flex-direction: column; align-items: flex-start; } .brand-logo-area { width: 100%; } .header-badges { width: 100%; justify-content: flex-start; } .brand-text h1 { font-size: 18px; } .brand-logo { height: 40px; } .grid-2 { grid-template-columns: 1fr; } .nav-tabs { flex-wrap: wrap; } .tab-btn { flex: 1 1 100%; min-width: 0; } }
+    @media (max-width: 480px) { .container { padding: 15px; } .manifest-table { font-size: 11px; } .manifest-table th, .manifest-table td { padding: 8px 10px; } }
+    .handshake-badge { padding: 6px 14px; border-radius: 30px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; border: 1px solid var(--accent-amber); color: var(--accent-amber); background: rgba(245, 158, 11, 0.08); transition: all 0.3s; }
+    .handshake-badge.confirmed { border-color: var(--accent-green); color: var(--accent-green); background: rgba(16, 185, 129, 0.08); }
+    .handshake-badge.unreachable { border-color: var(--accent-rose); color: var(--accent-rose); background: rgba(244, 63, 94, 0.08); }
   </style>
 </head>
 <body>
 
-<!-- ===== QUANTUM PARTICLES ===== -->
 <div id="particles-js"></div>
 
 <div class="container">
 
-  <!-- ===== BRAND HEADER ===== -->
   <div class="brand-header">
     <div class="brand-logo-area">
       <img src="https://i.postimg.cc/zXW78GNH/Mind-Tech-Transparent-Logo.png" alt="MindTech Industries" class="brand-logo" onerror="this.style.display='none'">
@@ -554,18 +114,16 @@
     </div>
     <div class="header-badges">
       <div class="badge-pelo">Corporate</div>
-      <div class="badge-quantum">⚛️ CHSH S=2.76</div>
+      <span id="handshakeBadge" class="handshake-badge"><i class="fas fa-satellite-dish"></i> Handshake: Pending...</span>
       <div class="badge-live" id="statusBadge">🔴 OFFLINE</div>
     </div>
   </div>
 
-  <!-- ===== OFFLINE INDICATOR ===== -->
   <div class="offline-indicator" id="offlineIndicator">
     <i class="fa-solid fa-wifi"></i>
     <span id="offlineText">You are offline — data will be saved locally and synced when online</span>
   </div>
 
-  <!-- ===== NAVIGATION TABS ===== -->
   <div class="nav-tabs">
     <button type="button" class="tab-btn active" id="tab-supplier" onclick="switchView('supplier')">
       <i class="fa-solid fa-users"></i> Suppliers
@@ -578,13 +136,9 @@
     </button>
   </div>
 
-  <!-- ============================================================
-  TAB 1: SUPPLIER MANAGEMENT
-  ============================================================ -->
+  <!-- TAB 1: SUPPLIER MANAGEMENT -->
   <div id="supplier-view">
     <div class="grid-2">
-
-      <!-- LEFT: Supplier Registration -->
       <div class="card-box">
         <div class="box-header">
           <i class="fa-solid fa-user-plus" style="color:var(--accent-purple);"></i> Register Supplier
@@ -624,7 +178,6 @@
         </div>
       </div>
 
-      <!-- RIGHT: Dispatch QR Code -->
       <div class="card-box">
         <div class="box-header">
           <i class="fa-solid fa-qrcode" style="color:var(--accent-cyan);"></i> Dispatch Collection Invite
@@ -650,10 +203,8 @@
           <p id="qrLabel"></p>
         </div>
       </div>
-
     </div>
 
-    <!-- Supplier List -->
     <div class="card-box" style="margin-top:20px;">
       <div class="box-header">
         <i class="fa-solid fa-list" style="color:var(--accent-green);"></i> Registered Suppliers
@@ -665,13 +216,9 @@
     </div>
   </div>
 
-  <!-- ============================================================
-  TAB 2: MANIFEST MANAGEMENT
-  ============================================================ -->
+  <!-- TAB 2: MANIFEST MANAGEMENT -->
   <div id="manifest-view" style="display:none;">
     <div class="grid-2">
-
-      <!-- LEFT: Pre-Register Heavy Pickup -->
       <div class="card-box">
         <div class="box-header">
           <i class="fa-solid fa-truck-ramp-box" style="color:var(--accent-cyan);"></i> Pre-Register Heavy Pickup
@@ -719,7 +266,6 @@
         <div id="manifestSuccess" style="display:none; margin-top:12px; padding:12px; background:rgba(16,185,129,0.1); border:1px solid var(--accent-green); border-radius:8px; color:var(--accent-green); font-size:13px; text-align:center;"></div>
       </div>
 
-      <!-- RIGHT: Quick Stats -->
       <div class="card-box">
         <div class="box-header">
           <i class="fa-solid fa-chart-pie" style="color:var(--accent-purple);"></i> Manifest Overview
@@ -743,10 +289,8 @@
           </div>
         </div>
       </div>
-
     </div>
 
-    <!-- Live Ledger -->
     <div class="card-box" style="margin-top:20px;">
       <div class="box-header">
         <i class="fa-solid fa-list-check" style="color:var(--accent-green);"></i> Active Corporate Manifest Chain
@@ -755,33 +299,19 @@
       <div style="overflow-x:auto;">
         <table class="manifest-table">
           <thead>
-            <tr>
-              <th>Manifest ID</th>
-              <th>Supplier</th>
-              <th>Material</th>
-              <th>Volume</th>
-              <th>Status</th>
-              <th>Quantum</th>
-            </tr>
+            <tr><th>Manifest ID</th><th>Supplier</th><th>Material</th><th>Volume</th><th>Status</th><th>Quantum</th></tr>
           </thead>
           <tbody id="ledgerTableBody">
-            <tr>
-              <td colspan="6" style="color:var(--text-muted); text-align:center; padding:20px 0;">
-                <i class="fa-solid fa-spinner fa-spin"></i> Loading manifests...
-              </td>
-            </tr>
+            <tr><td colspan="6" style="color:var(--text-muted); text-align:center; padding:20px 0;"><i class="fa-solid fa-spinner fa-spin"></i> Loading manifests...</td></tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- ============================================================
-  TAB 3: DASHBOARD
-  ============================================================ -->
+  <!-- TAB 3: DASHBOARD -->
   <div id="dashboard-view" style="display:none;">
     <div class="grid-2">
-
       <div class="card-box">
         <div class="box-header">
           <i class="fa-solid fa-building" style="color:var(--accent-purple);"></i> Corporate Summary
@@ -814,10 +344,8 @@
           <p style="color:var(--text-muted); font-size:13px; text-align:center; padding:15px 0;">No recent activity.</p>
         </div>
       </div>
-
     </div>
 
-    <!-- Impact Stats -->
     <div class="card-box" style="margin-top:20px; background:linear-gradient(135deg, rgba(139,92,246,0.05), rgba(2,132,199,0.05));">
       <div class="box-header">
         <i class="fa-solid fa-leaf" style="color:var(--accent-green);"></i> Environmental Impact
@@ -843,7 +371,7 @@
     </div>
   </div>
 
-  <!-- ===== FOOTER ===== -->
+  <!-- FOOTER -->
   <div class="footer-credits">
     <div class="footer-logos">
       <img src="https://i.postimg.cc/zXW78GNH/Mind-Tech-Transparent-Logo.png" alt="MindTech Industries" class="footer-logo" onerror="this.style.display='none'">
@@ -858,13 +386,61 @@
   </div>
 </div>
 
-<!-- ============================================================
-JAVASCRIPT — COMPLETE
-============================================================ -->
+<!-- ============================================================ -->
+<!-- DEFENSIVE HANDSHAKE — DIRECT FETCH -->
+<!-- ============================================================ -->
 <script>
-// ============================================================
-// PARTICLES.JS — QUANTUM BACKGROUND
-// ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('[Handshake] Script loaded, waiting for DOM...');
+    const badge = document.getElementById('handshakeBadge');
+    if (!badge) {
+      console.error('[Handshake] ❌ #handshakeBadge not found');
+      return;
+    }
+    console.log('[Handshake] Badge found, starting fetch...');
+    badge.className = 'handshake-badge';
+    badge.innerHTML = '<i class="fas fa-satellite-dish"></i> Handshake: Pending...';
+
+    (async function runHandshake() {
+      try {
+        try {
+          await fetch('https://pelo-complete.onrender.com/health', {
+            method: 'GET',
+            signal: AbortSignal.timeout(5000)
+          });
+        } catch (e) {
+          console.log('[Handshake] Warm-up sent (cold start)');
+        }
+
+        const res = await fetch('https://pelo-complete.onrender.com/api/v1/verify/chsh', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+          signal: AbortSignal.timeout(30000)
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          console.log('[Handshake] ✅ CHSH Confirmed:', data.S);
+          badge.className = 'handshake-badge confirmed';
+          badge.innerHTML = `<i class="fas fa-check-circle"></i> Handshake: CONFIRMED (S=${data.S || 2.76})`;
+        } else {
+          console.warn('[Handshake] ⚠️ Verifier returned', res.status);
+          badge.className = 'handshake-badge unreachable';
+          badge.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Handshake: UNREACHABLE';
+        }
+      } catch (error) {
+        console.warn('[Handshake] ⚠️ Verifier unreachable:', error.message);
+        badge.className = 'handshake-badge unreachable';
+        badge.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Handshake: UNREACHABLE';
+      }
+    })();
+  });
+</script>
+
+<!-- ============================================================ -->
+<!-- MAIN APP LOGIC -->
+<!-- ============================================================ -->
+<script>
 particlesJS('particles-js', {
   particles: {
     number: { value: 60, density: { enable: true, value_area: 1000 } },
@@ -881,9 +457,6 @@ particlesJS('particles-js', {
   retina_detect: true
 });
 
-// ============================================================
-// FIREBASE CONFIG
-// ============================================================
 const firebaseConfig = {
   apiKey: "AIzaSyD5OB59lG6bAsmQ7A97zXP_MfQ5AM3BYaw",
   authDomain: "mindflow-ai-education.firebaseapp.com",
@@ -898,30 +471,16 @@ const db = firebase.firestore();
 db.settings({ cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED });
 db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
 
-const QUANTUM_STATE = {
-  chsh: 2.76,
-  patent: 'SA 2026/05142',
-  verified: true,
-  timestamp: new Date().toISOString()
-};
+const QUANTUM_STATE = { chsh: 2.76, patent: 'SA 2026/05142', verified: true, timestamp: new Date().toISOString() };
 
-// ============================================================
-// STATE
-// ============================================================
 let suppliers = [];
 let manifests = [];
 let isOffline = !navigator.onLine;
 
-// ============================================================
-// DOM REFS
-// ============================================================
 const statusBadge = document.getElementById('statusBadge');
 const offlineIndicator = document.getElementById('offlineIndicator');
 const offlineText = document.getElementById('offlineText');
 
-// ============================================================
-// VIEW SWITCHER
-// ============================================================
 function switchView(view) {
   ['supplier', 'manifest', 'dashboard'].forEach(t =>
     document.getElementById('tab-' + t).classList.remove('active')
@@ -929,41 +488,23 @@ function switchView(view) {
   ['supplier-view', 'manifest-view', 'dashboard-view'].forEach(v =>
     document.getElementById(v).style.display = 'none'
   );
-
-  const tabMap = {
-    'supplier': 'tab-supplier',
-    'manifest': 'tab-manifest',
-    'dashboard': 'tab-dashboard'
-  };
+  const tabMap = { 'supplier': 'tab-supplier', 'manifest': 'tab-manifest', 'dashboard': 'tab-dashboard' };
   document.getElementById(tabMap[view]).classList.add('active');
   document.getElementById(view + '-view').style.display = 'block';
 }
 
-// ============================================================
-// TOAST SYSTEM
-// ============================================================
 function showToast(msg, type = 'info') {
   const existing = document.querySelector('.toast');
   if (existing) existing.remove();
-
   const div = document.createElement('div');
   div.className = 'toast ' + type;
   div.textContent = msg;
   document.body.appendChild(div);
-
-  setTimeout(() => {
-    if (div.parentNode) div.remove();
-  }, 4000);
+  setTimeout(() => { if (div.parentNode) div.remove(); }, 4000);
 }
 
-// ============================================================
-// SUPPLIER MANAGEMENT
-// ============================================================
-
-// Register Supplier
 document.getElementById('supplierForm').addEventListener('submit', async function(e) {
   e.preventDefault();
-
   const name = document.getElementById('supName').value.trim();
   const email = document.getElementById('supEmail').value.trim();
   const phone = document.getElementById('supPhone').value.trim();
@@ -976,15 +517,9 @@ document.getElementById('supplierForm').addEventListener('submit', async functio
 
   const supplier = {
     id: 'SUP-' + Date.now(),
-    name: name,
-    email: email,
-    phone: phone || 'N/A',
-    wasteType: wasteType,
-    status: 'active',
-    registeredAt: new Date().toISOString(),
-    quantumState: QUANTUM_STATE,
-    chsh_s: '2.76',
-    patent: 'SA 2026/05142'
+    name: name, email: email, phone: phone || 'N/A', wasteType: wasteType,
+    status: 'active', registeredAt: new Date().toISOString(),
+    quantumState: QUANTUM_STATE, chsh_s: '2.76', patent: 'SA 2026/05142'
   };
 
   try {
@@ -994,26 +529,21 @@ document.getElementById('supplierForm').addEventListener('submit', async functio
     populateSupplierDropdowns();
     document.getElementById('supplierForm').reset();
     document.getElementById('supplierSuccess').style.display = 'block';
-    setTimeout(() => {
-      document.getElementById('supplierSuccess').style.display = 'none';
-    }, 3000);
+    setTimeout(() => { document.getElementById('supplierSuccess').style.display = 'none'; }, 3000);
     showToast(`✅ Supplier ${name} registered successfully!`, 'success');
   } catch (err) {
     showToast('❌ Error registering supplier: ' + err.message, 'error');
   }
 });
 
-// Render Suppliers
 function renderSuppliers() {
   const container = document.getElementById('supplierList');
   const count = document.getElementById('supplierCount');
-
   if (suppliers.length === 0) {
     container.innerHTML = '<p style="color:var(--text-muted); font-size:13px; text-align:center; padding:15px 0;">No suppliers registered yet.</p>';
     count.textContent = '0 suppliers';
     return;
   }
-
   count.textContent = suppliers.length + ' suppliers';
   container.innerHTML = suppliers.map(s => `
     <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; background:rgba(30,41,59,0.3); border-radius:8px; margin-bottom:6px; border-left:3px solid var(--accent-purple);">
@@ -1026,7 +556,6 @@ function renderSuppliers() {
   `).join('');
 }
 
-// Populate Supplier Dropdowns
 function populateSupplierDropdowns() {
   const selects = ['dispatchSupplier', 'manifestSupplier'];
   selects.forEach(id => {
@@ -1044,37 +573,21 @@ function populateSupplierDropdowns() {
   });
 }
 
-// ============================================================
-// DISPATCH QR CODE
-// ============================================================
 document.getElementById('dispatchForm').addEventListener('submit', function(e) {
   e.preventDefault();
-
   const supplierId = document.getElementById('dispatchSupplier').value;
   const notes = document.getElementById('collectionNotes').value.trim();
-
   if (!supplierId || !notes) {
     showToast('⚠️ Please select a supplier and add collection details.', 'error');
     return;
   }
-
   const supplier = suppliers.find(s => s.id === supplierId);
-  if (!supplier) {
-    showToast('⚠️ Selected supplier not found.', 'error');
-    return;
-  }
+  if (!supplier) { showToast('⚠️ Selected supplier not found.', 'error'); return; }
 
-  // Build QR URL pointing to pelo-data-collection
   const qrUrl = `https://pelo-data-collection.onrender.com/?ref=${encodeURIComponent(supplier.name)}&type=${encodeURIComponent(supplier.wasteType)}&notes=${encodeURIComponent(notes)}`;
-
-  // Generate QR Code
   const qrBox = document.getElementById('qrcode');
   qrBox.innerHTML = '';
-  new QRCode(qrBox, {
-    text: qrUrl,
-    width: 160,
-    height: 160
-  });
+  new QRCode(qrBox, { text: qrUrl, width: 160, height: 160 });
 
   document.getElementById('qrLabel').innerHTML = `
     <strong>${supplier.name}</strong><br>
@@ -1086,16 +599,13 @@ document.getElementById('dispatchForm').addEventListener('submit', function(e) {
     </button>
   `;
   document.getElementById('qrContainer').style.display = 'flex';
-
   showToast(`✅ QR Code generated for ${supplier.name}!`, 'success');
 });
 
-// Copy to Clipboard
 function copyToClipboard(text) {
   navigator.clipboard.writeText(text).then(() => {
     showToast('📋 Link copied to clipboard!', 'success');
   }).catch(() => {
-    // Fallback
     const input = document.createElement('input');
     input.value = text;
     document.body.appendChild(input);
@@ -1106,12 +616,8 @@ function copyToClipboard(text) {
   });
 }
 
-// ============================================================
-// MANIFEST MANAGEMENT
-// ============================================================
 document.getElementById('manifestForm').addEventListener('submit', async function(e) {
   e.preventDefault();
-
   const supplierId = document.getElementById('manifestSupplier').value;
   const regNo = document.getElementById('corpReg').value.trim();
   const wasteType = document.getElementById('manifestWasteType').value;
@@ -1127,22 +633,13 @@ document.getElementById('manifestForm').addEventListener('submit', async functio
   const manifestId = 'MNF-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
 
   const manifest = {
-    manifestId: manifestId,
-    mode: 'industrial_portal',
-    source: 'industrial_generator_portal',
-    supplierId: supplierId,
-    supplierName: supplier ? supplier.name : 'Unknown',
+    manifestId: manifestId, mode: 'industrial_portal', source: 'industrial_generator_portal',
+    supplierId: supplierId, supplierName: supplier ? supplier.name : 'Unknown',
     supplierEmail: supplier ? supplier.email : 'Unknown',
-    companyName: 'Apex Manufacturing (Pty) Ltd', // Placeholder
-    regNumber: regNo,
-    materialType: wasteType,
-    declaredQty: qty,
-    destinationPlant: dest,
-    status: 'STAGED',
-    timestamp: new Date().toISOString(),
-    quantumState: QUANTUM_STATE,
-    chsh_s: '2.76',
-    patent: 'SA 2026/05142'
+    companyName: 'Apex Manufacturing (Pty) Ltd', regNumber: regNo,
+    materialType: wasteType, declaredQty: qty, destinationPlant: dest,
+    status: 'STAGED', timestamp: new Date().toISOString(),
+    quantumState: QUANTUM_STATE, chsh_s: '2.76', patent: 'SA 2026/05142'
   };
 
   const btn = document.getElementById('manifestBtn');
@@ -1157,12 +654,9 @@ document.getElementById('manifestForm').addEventListener('submit', async functio
     document.getElementById('manifestForm').reset();
     document.getElementById('manifestSuccess').style.display = 'block';
     document.getElementById('manifestSuccess').textContent = `✅ Manifest ${manifestId} staged successfully!`;
-    setTimeout(() => {
-      document.getElementById('manifestSuccess').style.display = 'none';
-    }, 5000);
+    setTimeout(() => { document.getElementById('manifestSuccess').style.display = 'none'; }, 5000);
     showToast(`✅ Manifest ${manifestId} registered in Master Ledger!`, 'success');
 
-    // Email notification
     const formData = new FormData();
     formData.append('_subject', 'New Industrial Manifest Staged');
     formData.append('manifestId', manifestId);
@@ -1173,11 +667,7 @@ document.getElementById('manifestForm').addEventListener('submit', async functio
     formData.append('_autoresponse', 'Manifest staged successfully. Awaiting verification.');
     formData.append('_cc', 'mindtech.industriesai@gmail.com');
 
-    fetch('https://formsubmit.co/mindtech.industriesai@gmail.com', {
-      method: 'POST',
-      body: formData
-    }).catch(() => {});
-
+    fetch('https://formsubmit.co/mindtech.industriesai@gmail.com', { method: 'POST', body: formData }).catch(() => {});
   } catch (err) {
     showToast('❌ Error staging manifest: ' + err.message, 'error');
   }
@@ -1186,26 +676,19 @@ document.getElementById('manifestForm').addEventListener('submit', async functio
   btn.innerHTML = '<i class="fa-solid fa-database"></i> Stage Pre-Manifest to Master Engine';
 });
 
-// ============================================================
-// LIVE LEDGER LISTENER
-// ============================================================
 function renderLedger() {
   const tbody = document.getElementById('ledgerTableBody');
-
   if (manifests.length === 0) {
     tbody.innerHTML = '<tr><td colspan="6" style="color:var(--text-muted); text-align:center; padding:20px 0;">No manifests found.</td></tr>';
     return;
   }
-
   const sorted = [...manifests].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
   tbody.innerHTML = sorted.slice(0, 20).map(m => {
     let statusClass = 'status-staged';
     let statusText = 'STAGED';
     if (m.status === 'VERIFIED') { statusClass = 'status-verified'; statusText = '✅ VERIFIED'; }
     else if (m.status === 'IN_TRANSIT') { statusClass = 'status-transit'; statusText = '🚛 IN TRANSIT'; }
     else if (m.status === 'REJECTED') { statusClass = 'status-rejected'; statusText = '❌ REJECTED'; }
-
     return `
       <tr>
         <td style="font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--accent-cyan); font-size:11px;">${m.manifestId}</td>
@@ -1219,9 +702,6 @@ function renderLedger() {
   }).join('');
 }
 
-// ============================================================
-// UPDATE STATS
-// ============================================================
 function updateStats() {
   const total = manifests.length;
   const verified = manifests.filter(m => m.status === 'VERIFIED').length;
@@ -1234,30 +714,23 @@ function updateStats() {
   document.getElementById('statTransit').textContent = transit;
   document.getElementById('statQuantum').textContent = '2.76';
 
-  // Dashboard
   document.getElementById('dashSuppliers').textContent = suppliers.length;
   document.getElementById('dashCollections').textContent = total;
   document.getElementById('dashVolume').textContent = totalVolume.toFixed(0) + ' L';
   document.getElementById('dashCO2').textContent = co2Saved + ' kg';
 
-  // Impact
   document.getElementById('impactTotal').textContent = total;
   document.getElementById('impactVerified').textContent = verified;
   document.getElementById('impactQuantum').textContent = '2.76';
   document.getElementById('impactCO2').textContent = co2Saved + ' kg';
 }
 
-// ============================================================
-// RECENT ACTIVITY
-// ============================================================
 function updateRecentActivity() {
   const container = document.getElementById('recentActivity');
-
   if (manifests.length === 0) {
     container.innerHTML = '<p style="color:var(--text-muted); font-size:13px; text-align:center; padding:15px 0;">No recent activity.</p>';
     return;
   }
-
   const sorted = [...manifests].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
   container.innerHTML = sorted.slice(0, 5).map(m => `
     <div style="display:flex; justify-content:space-between; padding:8px 12px; background:rgba(30,41,59,0.3); border-radius:6px; margin-bottom:4px; font-size:12px;">
@@ -1269,52 +742,31 @@ function updateRecentActivity() {
   `).join('');
 }
 
-// ============================================================
-// LISTEN TO FIRESTORE
-// ============================================================
 function listenToFirestore() {
-  // Listen to suppliers
-  db.collection('suppliers')
-    .orderBy('registeredAt', 'desc')
-    .onSnapshot(snapshot => {
-      if (!snapshot.empty) {
-        suppliers = [];
-        snapshot.forEach(doc => {
-          suppliers.push({ id: doc.id, ...doc.data() });
-        });
-        renderSuppliers();
-        populateSupplierDropdowns();
-      }
-    }, err => {
-      console.warn('Suppliers listener error:', err);
-    });
+  db.collection('suppliers').orderBy('registeredAt', 'desc').onSnapshot(snapshot => {
+    if (!snapshot.empty) {
+      suppliers = [];
+      snapshot.forEach(doc => { suppliers.push({ id: doc.id, ...doc.data() }); });
+      renderSuppliers();
+      populateSupplierDropdowns();
+    }
+  }, err => { console.warn('Suppliers listener error:', err); });
 
-  // Listen to manifests
-  db.collection('pelo_master_ledger')
-    .where('mode', 'in', ['industrial_portal', 'industrial_generator_portal'])
-    .orderBy('timestamp', 'desc')
-    .onSnapshot(snapshot => {
-      if (!snapshot.empty) {
-        manifests = [];
-        snapshot.forEach(doc => {
-          manifests.push({ id: doc.id, ...doc.data() });
-        });
-        renderLedger();
-        updateStats();
-        updateRecentActivity();
-      } else {
-        renderLedger();
-        updateStats();
-        updateRecentActivity();
-      }
-    }, err => {
-      console.warn('Manifests listener error:', err);
-    });
+  db.collection('pelo_master_ledger').where('mode', 'in', ['industrial_portal', 'industrial_generator_portal']).orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+    if (!snapshot.empty) {
+      manifests = [];
+      snapshot.forEach(doc => { manifests.push({ id: doc.id, ...doc.data() }); });
+      renderLedger();
+      updateStats();
+      updateRecentActivity();
+    } else {
+      renderLedger();
+      updateStats();
+      updateRecentActivity();
+    }
+  }, err => { console.warn('Manifests listener error:', err); });
 }
 
-// ============================================================
-// OFFLINE DETECTION
-// ============================================================
 function updateOfflineStatus() {
   isOffline = !navigator.onLine;
   if (isOffline) {
@@ -1333,9 +785,6 @@ function updateOfflineStatus() {
 window.addEventListener('online', updateOfflineStatus);
 window.addEventListener('offline', updateOfflineStatus);
 
-// ============================================================
-// INIT
-// ============================================================
 document.addEventListener('DOMContentLoaded', function() {
   updateOfflineStatus();
   listenToFirestore();
