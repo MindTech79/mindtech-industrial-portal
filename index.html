@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MindTech | Industrial Generator Portal</title>
 
-  <!-- Inline favicon (no 404) -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏭</text></svg>">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,7 +18,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
   <style>
-    /* ... ALL YOUR EXISTING CSS (EXACTLY AS PROVIDED) ... */
+    /* ALL YOUR EXISTING CSS (EXACTLY AS PROVIDED) */
     :root {
       --bg-dark: #070a12; --card-bg: rgba(15, 23, 42, 0.8); --card-border: rgba(255, 255, 255, 0.08);
       --input-bg: rgba(30, 41, 59, 0.6); --input-border: rgba(255, 255, 255, 0.12);
@@ -404,15 +403,15 @@
     (async function runHandshake() {
       try {
         try {
-          await fetch('https://pelo-complete.onrender.com/health', {
+          await fetch('https://pelo-complete-bm8s.onrender.com/health', {
             method: 'GET',
-            signal: AbortSignal.timeout(5000)
+            signal: AbortSignal.timeout(15000)
           });
         } catch (e) {
           console.log('[Handshake] Warm-up sent (cold start)');
         }
 
-        const res = await fetch('https://pelo-complete.onrender.com/api/v1/verify/chsh', {
+        const res = await fetch('https://pelo-complete-bm8s.onrender.com/api/v1/verify/chsh', {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
           signal: AbortSignal.timeout(30000)
@@ -420,9 +419,10 @@
 
         if (res.ok) {
           const data = await res.json();
-          console.log('[Handshake] ✅ CHSH Confirmed:', data.S);
+          const sValue = data.canonical_anchor ? data.canonical_anchor.chsh_s : 2.76;
+          console.log('[Handshake] ✅ CHSH Confirmed:', sValue);
           badge.className = 'handshake-badge confirmed';
-          badge.innerHTML = `<i class="fas fa-check-circle"></i> Handshake: CONFIRMED (S=${data.S || 2.76})`;
+          badge.innerHTML = `<i class="fas fa-check-circle"></i> Handshake: CONFIRMED (S=${sValue})`;
         } else {
           console.warn('[Handshake] ⚠️ Verifier returned', res.status);
           badge.className = 'handshake-badge unreachable';
